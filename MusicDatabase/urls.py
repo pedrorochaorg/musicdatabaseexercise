@@ -9,6 +9,6 @@ urlpatterns = [
 
     url(r'^api/', include('api.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^.*$', include('website.urls'))
+    url(r'^(?!api/)', include('website.urls'))
 
 ]
