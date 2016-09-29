@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc service
- * @name websitedevApp.APIData
+ * @name MusicDatabaseApp.APIData
  * @description
  * # APIData
- * Service in the websitedevApp.
+ * Service in the MusicDatabaseApp.
  */
-angular.module('websitedevApp')
+angular.module('MusicDatabaseApp')
   .service('APIData', ['$http','$q',function ($http,$q) {
     // AngularJS will instantiate a singleton by calling "new" on this function
 
@@ -18,6 +18,65 @@ angular.module('websitedevApp')
                     .then(function(response) {
                         if (typeof response.data === 'object') {
                             return response.data;
+                        } else {
+                            // invalid response
+                            return $q.reject(response.data);
+                        }
+
+                    }, function(response) {
+                        // something went wrong
+                        return $q.reject(response.data);
+                    });
+      },
+      getMusic: function(id){
+              return $http.get(apiUrl+'/musics/'+id+'/')
+                    .then(function(response) {
+                        if (typeof response.data === 'object') {
+                            return response.data;
+                        } else {
+                            // invalid response
+                            return $q.reject(response.data);
+                        }
+
+                    }, function(response) {
+                        // something went wrong
+                        return $q.reject(response.data);
+                    });
+
+      },
+      createMusic: function(user){
+          return $http.post(apiUrl+'/musics/',user).then(function(response) {
+                        if (typeof response.data === 'object') {
+                            return response.data;
+                        } else {
+                            // invalid response
+                            return $q.reject(response.data);
+                        }
+
+                    }, function(response) {
+                        // something went wrong
+                        return $q.reject(response.data);
+                    });
+      },
+      updateMusic: function(user){
+          return $http.put(apiUrl+'/musics/'+user.pk+'/',user).then(function(response) {
+                        if (typeof response.data === 'object') {
+                            return response.data;
+                        } else {
+                            // invalid response
+                            return $q.reject(response.data);
+                        }
+
+                    }, function(response) {
+                        // something went wrong
+                        return $q.reject(response.data);
+                    });
+      },
+      deleteMusic: function(user){
+          return $http.delete(apiUrl+'/musics/'+user+'/').then(function(response) {
+
+                        if (response.status === 204) {
+                            return true;
                         } else {
                             // invalid response
                             return $q.reject(response.data);
@@ -89,10 +148,23 @@ angular.module('websitedevApp')
       },
       deleteUser: function(user){
           return $http.delete(apiUrl+'/users/'+user+'/').then(function(response) {
-            console.log(response);
                         if (response.status === 204) {
                             return true;
                         } else {
+                            // invalid response
+                            return $q.reject(response.data);
+                        }
+
+                    }, function(response) {
+                        // something went wrong
+                        return $q.reject(response.data);
+                    });
+      },
+      populate: function(){
+        return $http.get(apiUrl+'/populate/').then(function(response) {
+                         if (typeof response.data === 'object') {
+                              return response.data['status'];
+                        }  else {
                             // invalid response
                             return $q.reject(response.data);
                         }

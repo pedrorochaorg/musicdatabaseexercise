@@ -33,5 +33,10 @@ class Command(BaseCommand):
         url = "http://freemusicarchive.org/recent.json"
         data = get_jsonparsed_data(url)
         for item in data['aTracks']:
-            m = Music(track_id=item['track_id'],album=item['album_title'],artist=item['artist_name'],track=item['track_title'])
-            m.save()
+            try:
+                old = Music.objects.get(track_id=item['track_id'])
+            except Music.DoesNotExist:
+                old = None
+            if old is None:
+                m = Music(track_id=item['track_id'],album=item['album_title'],artist=item['artist_name'],track=item['track_title'])
+                m.save()

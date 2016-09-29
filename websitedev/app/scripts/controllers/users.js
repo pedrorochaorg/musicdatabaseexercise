@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name websitedevApp.controller:MainCtrl
+ * @name MusicDatabaseApp.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the websitedevApp
+ * Controller of the MusicDatabaseApp
  */
-angular.module('websitedevApp')
-  .controller('UsersCtrl', ['APIData','$scope', function (APIData,$scope) {
+angular.module('MusicDatabaseApp')
+  .controller('UsersCtrl', ['APIData','$scope', '$anchorScroll', function (APIData,$scope,$anchorScroll) {
     $scope.users = [];
     $scope.user = {
       pk: null,
@@ -56,6 +56,7 @@ angular.module('websitedevApp')
 
     $scope.editUser = function(user){
       APIData.getUser(user.pk).then(function (data) {
+          $anchorScroll();
            $scope.user = data;
       }, function (error) {
           console.log(error);

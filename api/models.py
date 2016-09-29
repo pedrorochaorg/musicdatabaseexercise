@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Music(models.Model):
-    track_id = models.IntegerField(unique=True)
+    track_id = models.IntegerField(default=0)
     album = models.CharField(max_length=250,null=True)
     track = models.CharField(max_length=250)
     artist = models.CharField(max_length=250)

@@ -1,60 +1,51 @@
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-from api.models import User, Music
-from api.serializers.music import MusicSerializer
-from api.serializers.user import UserSerializer
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from api.models import Music
 
-class JSONResponse(HttpResponse):
+import urllib.request, json
+
+
+
+def get_jsonparsed_data(url):
     """
-    An HttpResponse that renders its content into JSON.
+    Receive the content of ``url``, parse it as JSON and return the object.
+
+    Parameters
+    ----------
+    url : str
+
+    Returns
+    -------
+    dict
     """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
+    user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 
-    @csrf_exempt
-    def user_list(request):
-        """
-        List all users, or create a new user.
-        """
-        if request.method == 'GET':
-            users = User.objects.all()
-            serializer = UserSerializer(users, many=True)
-            return JSONResponse(serializer.data)
+    headers = {'User-Agent': user_agent}
 
-        elif request.method == 'POST':
-            data = JSONParser().parse(request)
-            serializer = UserSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return JSONResponse(serializer.data, status=201)
-            return JSONResponse(serializer.errors, status=400)
+    request = urllib.request.Request(url, None, headers)  # The assembled request
+    response = urllib.request.urlopen(request)
+    data = response.read().decode("utf-8")
+    return json.loads(data)
 
-    @csrf_exempt
-    def user_detail(request, pk):
-        """
-        Retrieve, update or delete a code snippet.
-        """
+@api_view(['GET'])
+@csrf_exempt
+def populate_data(request):
+    """
+    Populates the DB with records from .
+    """
+    url = "http://freemusicarchive.org/recent.json"
+    data = get_jsonparsed_data(url)
+    for item in data['aTracks']:
         try:
-            user = User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            return HttpResponse(status=404)
+            old = Music.objects.get(track_id=item['track_id'])
+        except Music.DoesNotExist:
+            old = None
 
-        if request.method == 'GET':
-            serializer = UserSerializer(user)
-            return JSONResponse(serializer.data)
+        if old is None:
+            m = Music(track_id=item['track_id'], album=item['album_title'], artist=item['artist_name'],
+                      track=item['track_title'])
+            m.save()
 
-        elif request.method == 'PUT':
-            data = JSONParser().parse(request)
-            serializer = UserSerializer(user, data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return JSONResponse(serializer.data)
-            return JSONResponse(serializer.errors, status=400)
-
-        elif request.method == 'DELETE':
-            user.delete()
-            return HttpResponse(status=204)
+    return Response({'status': True})

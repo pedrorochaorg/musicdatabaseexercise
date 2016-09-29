@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc filter
- * @name websitedevApp.filter:ArtistUniqueFilter
+ * @name MusicDatabaseApp.filter:ArtistUniqueFilter
  * @function
  * @description
  * # ArtistUniqueFilter
  * Filter in the websitedevApp.
  */
-angular.module('websitedevApp')
+angular.module('MusicDatabaseApp')
   .filter('ArtistUniqueFilter', function () {
     return function (input) {
       var filtered = [];

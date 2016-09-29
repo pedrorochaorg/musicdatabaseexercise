@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc overview
- * @name websitedevApp
+ * @name MusicDatabaseApp
  * @description
- * # websitedevApp
+ * # MusicDatabaseApp
  *
  * Main module of the application.
  */
 var apiUrl = 'http://127.0.0.1:8000/api'
 
 angular
-  .module('websitedevApp', [
+  .module('MusicDatabaseApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -22,14 +22,16 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
+        templateUrl: 'views/musics.html',
+        controller: 'MusicsCtrl',
+        controllerAs: 'musics',
+        name: 'Musics'
+      })
+      .when('/users', {
         templateUrl: 'views/users.html',
         controller: 'UsersCtrl',
-        controllerAs: 'users'
-      })
-      .when('/detail/:userId', {
-        templateUrl: 'views/userDetails.html',
-        controller: 'UserDetailCtrl',
-        controllerAs: 'userDetails'
+        controllerAs: 'users',
+        name: 'Users'
       })
       .otherwise({
         redirectTo: '/'
