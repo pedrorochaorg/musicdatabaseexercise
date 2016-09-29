@@ -13,5 +13,5 @@ class Music(models.Model):
 class User(models.Model):
     username = models.CharField(max_length=250)
     email = models.EmailField(max_length=245,unique=True)
-    musics = models.ManyToManyField(Music, blank=True, null=True)
+    musics = models.ManyToManyField(Music, blank=True)
 
