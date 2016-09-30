@@ -8,7 +8,7 @@
  * Controller of the MusicDatabaseApp
  */
 angular.module('MusicDatabaseApp')
-  .controller('UsersCtrl', ['APIData','$scope', '$anchorScroll', function (APIData,$scope,$anchorScroll) {
+  .controller('UsersCtrl', ['APIData','$scope', '$anchorScroll','$timeout', function (APIData,$scope,$anchorScroll,$timeout) {
 
     /*
       Preloader On/Off bindings
@@ -25,7 +25,12 @@ angular.module('MusicDatabaseApp')
       error: false,
       success: false
     };
-
+    function cleanMessages(){
+        $scope.formMessages = {
+          error: false,
+          success: false
+        };
+    }
 
 
 
@@ -63,71 +68,80 @@ angular.module('MusicDatabaseApp')
 
     // Form Submit Handler
     $scope.submitForm = function(user,invalid){
-  // Check if form is invalid
-  if(!invalid) {
+      // Check if form is invalid
+      if(!invalid) {
 
-    //Display form preloader
-    $scope.preloaders.list = false;
-    $scope.preloaders.form = true;
-
-    //If the user object contains a property named pk and/or it's value equals to -1, it means taht we are creating a new record instead of updating an existing one.
-    if (user.pk == null || user.pk == undefined || user.pk == -1) {
-
-      // Create a new user
-      APIData.createUser({username: user.username, email: user.email, musics: user.musics}).then(function (data) {
-
-        $scope.userForm.$setPristine();
-        $scope.preloaders.list = true;
-        $scope.preloaders.form = false;
-        $scope.formMessages.success = 'Record created successfuly!';
-
-        getUsers();
-        $scope.resetForm();
-      }, function (error) {
-        // promise rejected, could log the error with: console.log('error', error);
+        //Display form preloader
         $scope.preloaders.list = false;
-        $scope.preloaders.form = false;
-        var errors = '';
-        for(var item in error ){
-          errors+= ''+error[item]+' ';
+        $scope.preloaders.form = true;
+
+        //If the user object contains a property named pk and/or it's value equals to -1, it means taht we are creating a new record instead of updating an existing one.
+        if (user.pk == null || user.pk == undefined || user.pk == -1) {
+
+          // Create a new user
+          APIData.createUser({username: user.username, email: user.email, musics: user.musics}).then(function (data) {
+
+            $scope.userForm.$setPristine();
+            $scope.preloaders.list = true;
+            $scope.preloaders.form = false;
+            $scope.formMessages.success = 'Record created successfuly!';
+            $timeout(cleanMessages,5000);
+
+            getUsers();
+            $scope.resetForm();
+          }, function (error) {
+            // promise rejected, could log the error with: console.log('error', error);
+            $scope.preloaders.list = false;
+            $scope.preloaders.form = false;
+            var errors = '';
+            for(var item in error ){
+              errors+= ''+error[item]+' ';
+            }
+            $scope.formMessages.error = errors;
+            $timeout(cleanMessages,5000);
+            console.log(error);
+
+
+          });
         }
-        $scope.formMessages.error = errors;
-        console.log(error);
+        else {
 
+          // Edit an existing user
 
-      });
-    }
-    else {
+          APIData.updateUser({
+            username: user.username,
+            email: user.email,
+            pk: user.pk,
+            musics: user.musics
+          }).then(function (data) {
+            $scope.userForm.$setPristine();
+            $scope.preloaders.list = true;
+            $scope.preloaders.form = false;
+            $scope.formMessages.success = 'Record updated successfuly!';
+            $timeout(cleanMessages,5000);
 
-      // Edit an existing user
-
-      APIData.updateUser({
-        username: user.username,
-        email: user.email,
-        pk: user.pk,
-        musics: user.musics
-      }).then(function (data) {
-        $scope.userForm.$setPristine();
-        $scope.preloaders.list = true;
-        $scope.preloaders.form = false;
-        $scope.formMessages.success = 'Record updated successfuly!';
-
-        getUsers();
-        $scope.resetForm();
-      }, function (error) {
-        // promise rejected, could log the error with: console.log('error', error);
-        $scope.preloaders.list = false;
-        $scope.preloaders.form = false;
-        var errors = '';
-        for(var item in error ){
-          errors+= ''+error[item]+' ';
+            getUsers();
+            $scope.resetForm();
+          }, function (error) {
+            // promise rejected, could log the error with: console.log('error', error);
+            $scope.preloaders.list = false;
+            $scope.preloaders.form = false;
+            var errors = '';
+            for(var item in error ){
+              errors+= ''+error[item]+' ';
+            }
+            $scope.formMessages.error = errors;
+            $timeout(cleanMessages,5000);
+            console.log(error);
+          });
         }
-        $scope.formMessages.error = errors;
-        console.log(error);
-      });
-    }
-  }
-};
+      }
+      else{
+              $scope.formMessages.error = 'Fill in all required(*) form fields!';
+              $timeout(cleanMessages,5000);
+
+      }
+    };
 
     // Select User for Update purposes
     $scope.editUser = function(user){
@@ -158,6 +172,7 @@ angular.module('MusicDatabaseApp')
       APIData.deleteUser(user.pk).then(function (data) {
 
         $scope.formMessages.success = 'Record deleted successfuly!';
+        $timeout(cleanMessages,5000);
 
         // Update User List
         getUsers();
@@ -171,6 +186,7 @@ angular.module('MusicDatabaseApp')
             errors+= ''+error[item]+' ';
           }
           $scope.formMessages.error = errors;
+          $timeout(cleanMessages,5000);
       });
     };
 

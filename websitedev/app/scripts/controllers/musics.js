@@ -8,7 +8,7 @@
  * Controller of the MusicDatabaseApp
  */
 angular.module('MusicDatabaseApp')
-  .controller('MusicsCtrl', ['APIData','$scope', '$anchorScroll', function (APIData,$scope,$anchorScroll) {
+  .controller('MusicsCtrl', ['APIData','$scope', '$anchorScroll','$timeout', function (APIData,$scope,$anchorScroll,$timeout) {
 
     /*
       Preloader On/Off bindings
@@ -26,7 +26,12 @@ angular.module('MusicDatabaseApp')
       error: false,
       success: false
     };
-
+    function cleanMessages(){
+        $scope.formMessages = {
+          error: false,
+          success: false
+        };
+    }
 
     /*
       Data Display bindings
@@ -73,6 +78,8 @@ angular.module('MusicDatabaseApp')
             $scope.preloaders.list = true;
             $scope.preloaders.form = false;
             $scope.formMessages.success = 'Record created successfuly!';
+            $timeout(cleanMessages,5000);
+
             getMusics();
             $scope.resetForm();
           }, function (error) {
@@ -84,6 +91,7 @@ angular.module('MusicDatabaseApp')
               errors+= ''+error[item]+' ';
             }
             $scope.formMessages.error = errors;
+            $timeout(cleanMessages,5000);
             console.log(error);
 
           });
@@ -99,6 +107,7 @@ angular.module('MusicDatabaseApp')
             $scope.preloaders.list = true;
             $scope.preloaders.form = false;
             $scope.formMessages.success = 'Record updated successfuly!';
+            $timeout(cleanMessages,5000);
             getMusics();
             $scope.resetForm();
           }, function (error) {
@@ -110,10 +119,16 @@ angular.module('MusicDatabaseApp')
               errors+= ''+error[item]+' ';
             }
             $scope.formMessages.error = errors;
+            $timeout(cleanMessages,5000);
 
 
           });
         }
+      }
+      else{
+          $scope.formMessages.error = 'Fill in all required(*) form fields!';
+          $timeout(cleanMessages,5000);
+
       }
     };
 
@@ -129,9 +144,11 @@ angular.module('MusicDatabaseApp')
 
       // Get music from API
       APIData.getMusic(music.pk).then(function (data) {
+          $scope.preloaders.form = false;
           $scope.music = data;
         }, function (error) {
-            console.log(error);
+          $scope.preloaders.form = false;
+          console.log(error);
         });
       };
 
@@ -145,6 +162,7 @@ angular.module('MusicDatabaseApp')
       // Delete Music Service
       APIData.deleteMusic(music.pk).then(function (data) {
         $scope.formMessages.success = 'Record deleted successfuly!';
+        $timeout(cleanMessages,5000);
 
         // Update Music List
         getMusics();
@@ -158,6 +176,9 @@ angular.module('MusicDatabaseApp')
             errors+= ''+error[item]+' ';
           }
           $scope.formMessages.error = errors;
+          $scope.preloaders.list = false;
+
+          $timeout(cleanMessages,5000);
 
       });
     };
