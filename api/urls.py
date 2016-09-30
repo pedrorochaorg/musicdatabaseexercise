@@ -11,5 +11,5 @@ router.register(r'musics', MusicViewSet)
 
 urlpatterns = [
     url(r'^populate/', views.populate_data),
-    url(r'^(?!populate)', include(router.urls))
+    url(r'^(?!populate)', include(router.urls)) # All urls execpt the ones started with populate/
 ]

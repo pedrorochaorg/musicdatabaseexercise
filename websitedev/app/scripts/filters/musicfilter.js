@@ -6,7 +6,7 @@
  * @function
  * @description
  * # MusicFilter
- * Filter in the MusicDatabaseApp.
+ * Filter in the MusicDatabaseApp.Filters the music array, returning only the items that the current user already has in is fav list
  */
 angular.module('MusicDatabaseApp')
   .filter('MusicFilter', function () {

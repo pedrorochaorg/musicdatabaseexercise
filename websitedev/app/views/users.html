@@ -1,10 +1,10 @@
 <div class="row">
-    <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
+    <div class="col-lg-8 col-md-7 col-sm-12 col-xs-12">
         <div class="panel panel-default">
-          <div class="panel-heading">Users</div>
-          <div class="panel-body">
+          <div class="panel-heading">Users <img src="images/preloader.gif" class="preloader small pull-right" ng-show="preloaders.list" /></div>
+          <div class="panel-body align-center">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table align-left">
                     <thead>
                         <tr>
                             <th>Username</th>
@@ -23,7 +23,6 @@
                                 <button type="button" class="btn btn-primary btn-xs" data-ng-click="editUser(item)"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
                                 <button type="button" class="btn btn-danger  btn-xs" data-ng-click="prepareUserDeletion(item)" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-trash"></span> Delete</button>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -32,18 +31,30 @@
         </div>
 
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12">
          <div class="panel panel-default">
-          <div class="panel-heading">User Details</div>
+          <div class="panel-heading">User Details <img src="images/preloader.gif" class="preloader small pull-right" ng-show="preloaders.form" /></div>
           <div class="panel-body">
-            <form novalidate>
-                <div class="form-group">
+            <div class="alert alert-success" role="alert" data-ng-show="formMessages.success">
+
+                {{ formMessages.success }}
+            </div>
+            <div class="alert alert-danger" role="alert" data-ng-show="formMessages.error">
+              {{ formMessages.error }}
+            </div>
+
+            <form name="userForm" novalidate>
+                <div class="form-group"  data-ng-class="{ 'has-error' : userForm.username.$invalid && (userForm.username.$touched && !userForm.username.$pristine) }">
                     <label for="username">Username</label>
-                    <input type="text" name="username" class="form-control" id="username" data-ng-model="user.username" placeholder="Username">
+                    <input type="text" name="username" class="form-control" id="username" data-ng-model="user.username" placeholder="Username" required>
+                    <p data-ng-show="userForm.username.$invalid && (userForm.username.$touched && !userForm.username.$pristine)" class="help-block">Username is required.</p>
+
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-ng-class="{ 'has-error' : userForm.email.$invalid && (userForm.email.$touched && !userForm.email.$pristine)}">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" data-ng-model="user.email" placeholder="Email">
+                    <input type="email" class="form-control" id="email" name="email" data-ng-model="user.email" placeholder="Email" required="">
+                    <p ng-show="userForm.email.$invalid && (userForm.email.$touched && !userForm.email.$pristine)" class="help-block">Enter a valid email.</p>
+
                 </div>
                 <div class="panel panel-default">
                   <div class="panel-heading">Musics</div>
@@ -66,7 +77,7 @@
                                                 <td>{{ item.album }}</td>
                                                 <td>{{ item.track }}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger  btn-xs" data-ng-click="deleteUserSong(item.pk,user)"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+                                                    <button type="button" class="btn btn-danger  btn-xs"  data-ng-click="deleteUserSong(item.pk,user)"><span class="glyphicon glyphicon-trash"></span> Delete</button>
                                                 </td>
 
                                             </tr>
@@ -103,8 +114,8 @@
                 <div class="row">
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button type="submit" data-ng-click="submitForm(user)" class="btn btn-primary">Save</button>
-                        <button type="button" data-ng-click="resetForm()" class="btn btn-danger">Cancel</button>
+                        <button type="submit" data-ng-click="submitForm(user,userForm.$invalid)" class="btn btn-primary">Save</button>
+                        <button type="button" data-ng-click="resetForm(true)" class="btn btn-danger">Cancel</button>
 
                     </div>
                 </div>
@@ -119,10 +130,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">Delete User</h4>
       </div>
       <div class="modal-body">
-        ...
+        Do you really wish to delete this user?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-ng-click="deleteUser(userToDelete)"  data-dismiss="modal">Delete</button>

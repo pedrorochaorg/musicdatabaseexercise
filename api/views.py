@@ -33,7 +33,7 @@ def get_jsonparsed_data(url):
 @csrf_exempt
 def populate_data(request):
     """
-    Populates the DB with records from .
+    Populates the DB with records from http://freemusicarchive.org/recent.json.
     """
     url = "http://freemusicarchive.org/recent.json"
     data = get_jsonparsed_data(url)

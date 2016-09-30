@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+# Index View
 def index(request):
 	return render(request, 'website/index.html', {'title': 'Music Database'})

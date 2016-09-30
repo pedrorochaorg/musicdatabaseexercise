@@ -1,9 +1,12 @@
 <div class="row">
-    <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
+
+    <!-- List Container Init -->
+    <div class="col-lg-8 col-md-7 col-sm-12 col-xs-12">
         <div class="panel panel-default">
-          <div class="panel-heading">Musics</div>
+          <div class="panel-heading">Musics <img src="images/preloader.gif" class="preloader small pull-right" ng-show="preloaders.list" /></div>
           <div class="panel-body">
             <div class="table-responsive">
+                <!-- Data Table Init -->
                 <table class="table">
                     <thead>
                         <tr>
@@ -11,7 +14,6 @@
                             <th>Album</th>
                             <th>Track</th>
                             <th class="options">Options</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -20,53 +22,77 @@
                             <td>{{ item.album }}</td>
                             <td>{{ item.track }}</td>
                             <td>
+                                <!-- Actions Init -->
                                 <button type="button" class="btn btn-primary btn-xs" data-ng-click="editMusic(item)"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
                                 <button type="button" class="btn btn-danger  btn-xs" data-ng-click="prepareMusicDeletion(item)" data-toggle="modal" data-target="#myModalA"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+                                <!-- Actions End -->
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
+                <!-- Data Table End -->
             </div>
           </div>
         </div>
-
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+    <!-- List Container End -->
+
+
+
+    <!-- Form/Population Containers Init -->
+    <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12">
+        <!-- Form Init -->
          <div class="panel panel-default">
-          <div class="panel-heading">Music Details</div>
+          <div class="panel-heading">Music Details <img src="images/preloader.gif" class="preloader small pull-right" ng-show="preloaders.form" /></div>
           <div class="panel-body">
-            <form novalidate>
-                <div class="form-group">
-                    <label for="artist">Artist</label>
-                    <input type="text" name="artist" class="form-control" id="artist" data-ng-model="music.artist" placeholder="Artist">
+
+
+            <!-- Alerts Init -->
+            <div class="alert alert-success" role="alert" data-ng-show="formMessages.success">
+                {{ formMessages.success }}
+            </div>
+            <div class="alert alert-danger" role="alert" data-ng-show="formMessages.error">
+              {{ formMessages.error }}
+            </div>
+            <!-- Alerts End -->
+
+            <!-- Form Fields Init -->
+            <form name="musicForm" novalidate>
+                <div class="form-group" data-ng-class="{ 'has-error' : musicForm.artist.$invalid && (musicForm.artist.$touched && !musicForm.artist.$pristine) }">
+                    <label for="artist">Artist<sup>*</sup></label>
+                    <input type="text" name="artist" class="form-control" id="artist" data-ng-model="music.artist" placeholder="Artist" required>
+                    <p data-ng-show="musicForm.artist.$invalid && (musicForm.artist.$touched && !musicForm.artist.$pristine)" class="help-block">Artist Name is required.</p>
+
                 </div>
                 <div class="form-group">
                     <label for="album">Album</label>
                     <input type="text" name="album" class="form-control" id="album" data-ng-model="music.album" placeholder="Album">
                 </div>
-                <div class="form-group">
-                    <label for="track">Track</label>
-                    <input type="text" name="track" class="form-control" id="track" data-ng-model="music.track" placeholder="Track">
+                <div class="form-group" data-ng-class="{ 'has-error' : musicForm.track.$invalid && (musicForm.track.$touched && !musicForm.track.$pristine) }">
+                    <label for="track">Track<sup>*</sup></label>
+                    <input type="text" name="track" class="form-control" id="track" data-ng-model="music.track" placeholder="Track" required>
+                    <p data-ng-show="musicForm.track.$invalid && (musicForm.track.$touched && !musicForm.track.$pristine)" class="help-block">Track Title is required.</p>
                 </div>
-
-
-
                 <input type="hidden" name="pk" id="pk" data-ng-model="music.pk" />
                 <div class="row">
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button type="submit" data-ng-click="submitForm(music)" class="btn btn-primary">Save</button>
-                        <button type="button" data-ng-click="resetForm()" class="btn btn-danger">Cancel</button>
+                        <button type="submit" data-ng-click="submitForm(music,musicForm.$invalid)" class="btn btn-primary">Save</button>
+                        <button type="button" data-ng-click="resetForm(true)" class="btn btn-danger">Cancel</button>
 
                     </div>
                 </div>
             </form>
+            <!-- Form Fields End -->
+
           </div>
         </div>
+        <!-- Form End -->
 
+
+        <!-- Populate Action Init -->
         <div class="panel panel-default">
-          <div class="panel-heading">Populate</div>
+          <div class="panel-heading">Populate <img src="images/preloader.gif" class="preloader small pull-right" ng-show="preloaders.populate" /></div>
           <div class="panel-body">
                 <div class="form-group">
                     <label for="populateBtn">Get Data From http://freemusicarchive.org</label><br />
@@ -74,9 +100,14 @@
                 </div>
           </div>
         </div>
+        <!-- Populate Action End -->
+
     </div>
+    <!-- Form/Population Containers End -->
+
 </div>
-<!-- Modal -->
+
+<!-- Delete Modal Init -->
 <div class="modal fade" id="myModalA" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -90,8 +121,8 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-ng-click="deleteMusic(musicToDelete)"  data-dismiss="modal">Delete</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-
       </div>
     </div>
   </div>
 </div>
+<!-- Delete Modal End -->

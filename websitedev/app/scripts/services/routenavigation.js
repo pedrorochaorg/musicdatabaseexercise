@@ -5,7 +5,7 @@
  * @name MusicDatabaseApp.routeNavigation
  * @description
  * # routeNavigation
- * Service in the MusicDatabaseApp.
+ * Service in the MusicDatabaseApp. This service is responsible for collecting all APP routes, and verifing the current route ( Navigational Top Menu purposes )
  */
 angular.module('MusicDatabaseApp')
   .service('routeNavigation', ['$route','$location',function ($route,$location) {

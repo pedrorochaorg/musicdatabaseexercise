@@ -21,3 +21,34 @@ body {
 th.options{
   min-width: 130px;
 }
+
+
+.align-center{
+  text-align:center !important;
+}
+
+.align-left{
+  text-align:left !important;
+}
+img.preloader{
+  display:inline-block;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  &.hidden {
+    display:none;
+  }
+  &.small {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+  }
+  &.pull-right {
+    float:right;
+    display:block;
+    margin-right: 0px;
+  }
+
+}

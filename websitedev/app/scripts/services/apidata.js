@@ -5,11 +5,10 @@
  * @name MusicDatabaseApp.APIData
  * @description
  * # APIData
- * Service in the MusicDatabaseApp.
+ * Service in the MusicDatabaseApp. This service is responsible for all the Communications between this webapp and our Django API. This service returns a promisse for each method
  */
 angular.module('MusicDatabaseApp')
   .service('APIData', ['$http','$q',function ($http,$q) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
 
     return {
 
