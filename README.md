@@ -45,7 +45,7 @@ This folder has the following structure ( Only folders that have been modified w
     -  `settings.py` ( Project Application Global Settings *DATABASE CONFIG* )
     -  `urls.py` ( Django Urls Setup File )
     -  `wsgi.py` ( Web Server Config for Deployment Purposes )
- - `api` ( Api Application files, API routes )
+ - `api` (Api Application files, API routes)
     -  `management` ( Folder containing aditional management files )
         -  `commands` ( Folder containg aditional command definition files )
             -  `__init__.py` ( Python package initializer )
@@ -295,7 +295,7 @@ MIT
    [python]: <https://www.python.org/>
    [pip]: <https://pypi.python.org/pypi/pip>
    [virtualenv]: <https://virtualenv.pypa.io/en/stable/>
-   [postgres]: <https://www.postgresql.org/>
+   [postgresql]: <https://www.postgresql.org/>
    [heroku]: <https://musicdatabaseexercise.herokuapp.com>
    [yo]: <http://yeoman.io>
    [yoangular]: <https://github.com/yeoman/generator-angular#readme>
