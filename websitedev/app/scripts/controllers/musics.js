@@ -103,7 +103,7 @@ angular.module('MusicDatabaseApp')
             artist: music.artist,
             pk: music.pk
           }).then(function (data) {
-            $scope.userForm.$setPristine();
+            $scope.musicForm.$setPristine();
             $scope.preloaders.list = true;
             $scope.preloaders.form = false;
             $scope.formMessages.success = 'Record updated successfuly!';
