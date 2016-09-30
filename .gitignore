@@ -1,2 +1,4 @@
 devenv/
 db.sqlite3
+websitedev/node_modules/
+websitedev/bower_components/
